@@ -11,21 +11,20 @@ const bucketParams = {
   Bucket: "shirajganguly.com",
 }
 
-app.get('/thumbnail/:image_id', (req, res) =>{
+app.get('/thumbnail/:image_id', (req, res, next) =>{
   s3.getObject({...bucketParams, ...{Key: `images/${req.params.image_id}`}},(error, data) => {
     if(!error) {
       var imageData = Buffer.from(data.Body);
-      Jimp.read(imageData)
-          .then(image => {
-              image.cover(thumbnailWidth, thumbnailHeight)
-              .getBufferAsync(Jimp.AUTO)
-              .then((imageBuffer) => {
-                res.write(imageBuffer);
-                res.send();
-              })
-          });
+      Jimp.read(imageData).then(image => {
+        image.cover(thumbnailWidth, thumbnailHeight)
+             .getBufferAsync(Jimp.AUTO)
+             .then((imageBuffer) => {
+               res.write(imageBuffer);
+               res.send();
+             }).catch(err => next(err))
+      }).catch(err => next(err));
     } else {
-      console.error(error);
+      next(error);
     }
   })
 });
