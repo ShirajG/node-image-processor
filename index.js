@@ -1,6 +1,4 @@
 require('dotenv').config();
-const thumbnailWidth = 200;
-const thumbnailHeight = 150;
 const Jimp = require('jimp');
 const express = require('express')
 const AWS = require('aws-sdk');
@@ -11,12 +9,26 @@ const bucketParams = {
   Bucket: "shirajganguly.com",
 }
 
-app.get('/thumbnail/:image_id', (req, res, next) =>{
+app.get('/:size/:image_id', (req, res, next) =>{
+  var imageHeight, imageWidth;
+  switch (req.params.size) {
+    case 'thumbnail':
+      imageWidth = 200;
+      imageHeight = 150;
+      break;
+    case 'full':
+      imageWidth = 2000;
+      imageHeight = 1500;
+      break;
+    default:
+      imageWidth = 200;
+      imageHeight = 150;
+  }
   s3.getObject({...bucketParams, ...{Key: `images/${req.params.image_id}`}},(error, data) => {
     if(!error) {
       var imageData = Buffer.from(data.Body);
       Jimp.read(imageData).then(image => {
-        image.cover(thumbnailWidth, thumbnailHeight)
+        image.cover(imageWidth, imageHeight)
              .getBufferAsync(Jimp.AUTO)
              .then((imageBuffer) => {
                res.write(imageBuffer);
