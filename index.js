@@ -17,8 +17,8 @@ app.get('/:size/:image_id', (req, res, next) =>{
       imageHeight = 150;
       break;
     case 'full':
-      imageWidth = 2000;
-      imageHeight = 1500;
+      imageWidth = 600;
+      imageHeight = 450;
       break;
     default:
       imageWidth = 200;
