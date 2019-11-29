@@ -6,7 +6,7 @@ const s3 = new AWS.S3();
 const app = express();
 const port = 3000;
 const bucketParams = {
-  Bucket: "shirajganguly.com",
+  Bucket: "portfolio-images.shirajganguly.com",
 }
 
 app.get('/:size/:image_id', (req, res, next) =>{
