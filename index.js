@@ -24,7 +24,7 @@ app.get('/:size/:image_id', (req, res, next) =>{
       imageWidth = 200;
       imageHeight = 150;
   }
-  s3.getObject({...bucketParams, ...{Key: `images/${req.params.image_id}`}},(error, data) => {
+  s3.getObject({...bucketParams, ...{Key: `${req.params.image_id}`}},(error, data) => {
     if(!error) {
       var imageData = Buffer.from(data.Body);
       Jimp.read(imageData).then(image => {
