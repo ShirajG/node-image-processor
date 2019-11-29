@@ -28,7 +28,7 @@ app.get('/:size/:image_id', (req, res, next) =>{
     if(!error) {
       var imageData = Buffer.from(data.Body);
       Jimp.read(imageData).then(image => {
-        image.cover(imageWidth, imageHeight)
+        image.scaleToFit(imageWidth, imageHeight)
              .getBufferAsync(Jimp.AUTO)
              .then((imageBuffer) => {
                res.write(imageBuffer);
